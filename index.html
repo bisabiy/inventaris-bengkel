@@ -1,15 +1,181 @@
-<h1>Inventaris Bengkel TI</h1>
-<p>SMK Negeri 1</p>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SiPinjam Bengkel TI</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f5f6f8;--card:#fff;--tx:#1b2430;--mu:#6b7686;--bd:#e2e6ec;--ac:#1d6fd8;--ok:#1a8f4c;--wn:#c77700;--er:#d33a3a;--okb:#e3f5ea;--wnb:#fff1dc;--erb:#fde6e6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151c;--card:#19212b;--tx:#e8edf3;--mu:#97a3b3;--bd:#2a3441;--ac:#5aa2ff;--ok:#4cc98a;--wn:#f0b255;--er:#ff7a7a;--okb:#16352a;--wnb:#3a2d14;--erb:#3d1f1f}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{padding:18px 16px 8px;max-width:960px;margin:auto}
+h1{margin:0;font-size:20px}h1 small{display:block;font-size:13px;font-weight:400;color:var(--mu)}
+nav{display:flex;gap:6px;max-width:960px;margin:8px auto;padding:0 16px;overflow-x:auto}
+nav button{flex:1;min-width:90px;padding:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font:inherit;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+main{max-width:960px;margin:auto;padding:8px 16px 40px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px}
+.stat b{display:block;font-size:26px}.stat span{color:var(--mu);font-size:13px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mu);font-weight:600;font-size:12px;text-transform:uppercase}
+.b{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600}
+.tersedia{background:var(--okb);color:var(--ok)}.dipinjam{background:var(--wnb);color:var(--wn)}.telat{background:var(--erb);color:var(--er)}
+input,select,button.act{font:inherit;padding:9px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);width:100%}
+label{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
+button.act{width:auto;background:var(--ac);color:#fff;border-color:var(--ac);cursor:pointer;font-weight:600}
+button.act.g{background:var(--card);color:var(--tx);border-color:var(--bd)}button.act.r{background:var(--er);border-color:var(--er)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.row>*{flex:1;min-width:130px}.row>button{flex:0 0 auto}
+#reader{width:100%;max-width:380px;margin:10px auto 0;border-radius:10px;overflow:hidden}
+.msg{padding:10px;border-radius:8px;margin-top:10px;background:var(--wnb);color:var(--wn);font-size:14px}
+.qrg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.qi{border:1px dashed var(--bd);border-radius:10px;padding:10px;text-align:center;background:#fff;color:#111}
+.qi div.q{display:flex;justify-content:center;margin-bottom:6px}.qi b{display:block}.qi small{color:#555}
+.hide{display:none}
+@media print{header,nav,.card,.stats,#t-dash,#t-scan,#t-log,.noprint{display:none!important}#t-inv{display:block!important}body{background:#fff}}
+</style>
+</head>
+<body>
+<header><h1>SiPinjam Bengkel TI<small>Pencatatan peminjaman alat berbasis QR code</small></h1></header>
+<nav id="nav">
+<button data-t="dash" class="on">Dasbor</button><button data-t="scan">Scan QR</button><button data-t="inv">Inventaris</button><button data-t="log">Riwayat</button>
+</nav>
+<main>
+<section id="t-dash">
+<div class="stats" id="stats"></div>
+<div class="card"><b>Status alat real-time</b><div class="tw"><table id="dashTbl"></table></div></div>
+</section>
 
-<ul>
-  <li>Multimeter: 12 unit</li>
-  <li>Tang crimping: 8 unit</li>
-  <li>RJ-45: 50 kotak</li>
-  <li>Kabel LAN: 50 meter</li>
-  <li>Solder: 8 unit</li>
-  <li>LAN tester: 8 unit</li>
-  <li>Switch : 4 unit</li>
-  <li>Router : 4 unit</li>
-  <a href="profile.html">pindah ke profile</a>
-  <a href="home.html">pindah ke home</a>
-</ul>
+<section id="t-scan" class="hide">
+<div class="card">
+<b>Scan kode QR alat</b>
+<div class="row" style="margin-top:8px"><button class="act" id="camBtn">Buka kamera</button><button class="act g hide" id="stopBtn">Tutup kamera</button></div>
+<div id="reader"></div><div id="camMsg"></div>
+<label>Atau ketik kode alat secara manual</label>
+<div class="row"><input id="manual" placeholder="contoh: ALT-001"><button class="act g" id="manBtn">Cari</button></div>
+</div>
+<div class="card hide" id="result"></div>
+</section>
+
+<section id="t-inv" class="hide">
+<div class="card noprint">
+<b>Tambah alat baru</b>
+<div class="row"><div><label>Nama alat</label><input id="inNama" placeholder="Multimeter Digital"></div>
+<div><label>Kategori</label><select id="inKat"><option>Alat Ukur</option><option>Perkakas</option><option>Perangkat</option><option>Lainnya</option></select></div>
+<button class="act" id="addBtn">Tambah</button></div>
+</div>
+<div class="row noprint" style="margin-bottom:10px"><button class="act g" onclick="window.print()">Cetak label QR</button></div>
+<div class="qrg" id="qrg"></div>
+</section>
+
+<section id="t-log" class="hide">
+<div class="card"><b>Riwayat peminjaman</b><div class="tw"><table id="logTbl"></table></div></div>
+<button class="act r noprint" id="resetBtn">Reset semua data</button>
+</section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const KEY='sipinjam_v1';
+const today=()=>new Date().toISOString().slice(0,10);
+const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const fmt=s=>s?new Date(s+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'–';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const seed=()=>({items:[
+ {id:'ALT-001',nama:'Multimeter Digital',kat:'Alat Ukur',st:'tersedia'},
+ {id:'ALT-002',nama:'Multimeter Analog',kat:'Alat Ukur',st:'tersedia'},
+ {id:'ALT-003',nama:'Tang Crimping RJ45',kat:'Perkakas',st:'tersedia'},
+ {id:'ALT-004',nama:'LAN Tester',kat:'Alat Ukur',st:'tersedia'},
+ {id:'ALT-005',nama:'Laptop Praktik 01',kat:'Perangkat',st:'tersedia'},
+ {id:'ALT-006',nama:'Laptop Praktik 02',kat:'Perangkat',st:'tersedia'}],logs:[]});
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S||!S.items)S=seed();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const late=i=>i.st==='dipinjam'&&i.due<today();
+const badge=i=>late(i)?'<span class="b telat">Terlambat</span>':i.st==='dipinjam'?'<span class="b dipinjam">Dipinjam</span>':'<span class="b tersedia">Tersedia</span>';
+
+function renderDash(){
+ const n=S.items.length,p=S.items.filter(i=>i.st==='dipinjam').length,t=S.items.filter(late).length;
+ document.getElementById('stats').innerHTML=
+  `<div class="stat"><b>${n}</b><span>Total alat</span></div><div class="stat"><b style="color:var(--ok)">${n-p}</b><span>Tersedia</span></div><div class="stat"><b style="color:var(--wn)">${p}</b><span>Sedang dipinjam</span></div><div class="stat"><b style="color:var(--er)">${t}</b><span>Terlambat</span></div>`;
+ document.getElementById('dashTbl').innerHTML='<tr><th>Kode</th><th>Alat</th><th>Status</th><th>Peminjam</th><th>Jatuh tempo</th></tr>'+
+  S.items.map(i=>`<tr><td>${esc(i.id)}</td><td>${esc(i.nama)}</td><td>${badge(i)}</td><td>${i.st==='dipinjam'?esc(i.peminjam):'–'}</td><td>${i.st==='dipinjam'?fmt(i.due):'–'}</td></tr>`).join('');
+}
+function renderLog(){
+ document.getElementById('logTbl').innerHTML='<tr><th>Alat</th><th>Peminjam</th><th>Pinjam</th><th>Tenggat</th><th>Kembali</th></tr>'+
+  (S.logs.length?S.logs.slice().reverse().map(l=>`<tr><td>${esc(l.nama)} (${esc(l.id)})</td><td>${esc(l.peminjam)}</td><td>${fmt(l.pinjam)}</td><td>${fmt(l.due)}</td><td>${l.kembali?fmt(l.kembali)+(l.kembali>l.due?' <span class="b telat">telat</span>':''):'<span class="b dipinjam">belum</span>'}</td></tr>`).join(''):'<tr><td colspan="5" style="color:var(--mu)">Belum ada riwayat.</td></tr>');
+}
+function renderInv(){
+ const g=document.getElementById('qrg');g.innerHTML='';
+ S.items.forEach(i=>{
+  const d=document.createElement('div');d.className='qi';
+  d.innerHTML=`<div class="q"></div><b>${esc(i.id)}</b><small>${esc(i.nama)}</small><div class="noprint" style="margin-top:6px"><button class="act g" style="padding:4px 10px;font-size:12px">Hapus</button></div>`;
+  g.appendChild(d);
+  try{new QRCode(d.querySelector('.q'),{text:i.id,width:110,height:110})}catch(e){}
+  d.querySelector('button').onclick=()=>{if(i.st==='dipinjam')return alert('Alat sedang dipinjam.');if(confirm('Hapus '+i.nama+'?')){S.items=S.items.filter(x=>x!==i);save();renderAll()}};
+ });
+}
+function renderAll(){renderDash();renderLog();renderInv()}
+
+function showItem(code){
+ code=code.trim().toUpperCase();
+ const i=S.items.find(x=>x.id===code),r=document.getElementById('result');r.classList.remove('hide');
+ if(!i){r.innerHTML=`<div class="msg" style="margin:0">Kode “${esc(code)}” tidak ditemukan.</div>`;return}
+ let h=`<b>${esc(i.nama)}</b> <small style="color:var(--mu)">${esc(i.id)} · ${esc(i.kat)}</small><div style="margin:6px 0">${badge(i)}</div>`;
+ if(i.st==='tersedia'){
+  h+=`<label>Nama peminjam</label><input id="fNama" placeholder="Nama / kelas"><label>Tanggal kembali</label><input type="date" id="fDue" value="${addDays(3)}" min="${today()}"><div class="row" style="margin-top:10px"><button class="act" id="fGo">Pinjamkan</button></div>`;
+ }else{
+  h+=`<div>Dipinjam oleh <b>${esc(i.peminjam)}</b> sejak ${fmt(i.tgl)}, tenggat ${fmt(i.due)}.</div><div class="row" style="margin-top:10px"><button class="act" id="fBack">Tandai dikembalikan</button></div>`;
+ }
+ r.innerHTML=h;
+ if(i.st==='tersedia')document.getElementById('fGo').onclick=()=>{
+  const n=document.getElementById('fNama').value.trim(),d=document.getElementById('fDue').value;
+  if(!n||!d)return alert('Isi nama peminjam dan tanggal kembali.');
+  Object.assign(i,{st:'dipinjam',peminjam:n,tgl:today(),due:d});
+  S.logs.push({id:i.id,nama:i.nama,peminjam:n,pinjam:today(),due:d,kembali:null});
+  save();renderAll();showItem(i.id)};
+ else document.getElementById('fBack').onclick=()=>{
+  const l=S.logs.slice().reverse().find(x=>x.id===i.id&&!x.kembali);if(l)l.kembali=today();
+  Object.assign(i,{st:'tersedia',peminjam:null,due:null,tgl:null});save();renderAll();showItem(i.id)};
+}
+
+let scanner=null;
+async function stopCam(){
+ try{if(scanner){await scanner.stop();scanner.clear()}}catch(e){}
+ scanner=null;document.getElementById('stopBtn').classList.add('hide');document.getElementById('camBtn').classList.remove('hide');
+}
+document.getElementById('camBtn').onclick=async()=>{
+ const m=document.getElementById('camMsg');m.innerHTML='';
+ try{
+  scanner=new Html5Qrcode('reader');
+  await scanner.start({facingMode:'environment'},{fps:10,qrbox:220},txt=>{showItem(txt);stopCam()},()=>{});
+  document.getElementById('stopBtn').classList.remove('hide');document.getElementById('camBtn').classList.add('hide');
+ }catch(e){scanner=null;m.innerHTML='<div class="msg">Kamera tidak dapat diakses (izin ditolak atau tidak tersedia). Gunakan input manual di bawah.</div>'}
+};
+document.getElementById('stopBtn').onclick=stopCam;
+document.getElementById('manBtn').onclick=()=>{const v=document.getElementById('manual').value;if(v.trim())showItem(v)};
+document.getElementById('manual').onkeydown=e=>{if(e.key==='Enter')document.getElementById('manBtn').click()};
+
+document.getElementById('addBtn').onclick=()=>{
+ const n=document.getElementById('inNama').value.trim();if(!n)return;
+ const max=S.items.reduce((a,i)=>Math.max(a,parseInt(i.id.split('-')[1])||0),0)+1;
+ S.items.push({id:'ALT-'+String(max).padStart(3,'0'),nama:n,kat:document.getElementById('inKat').value,st:'tersedia'});
+ document.getElementById('inNama').value='';save();renderAll();
+};
+document.getElementById('resetBtn').onclick=()=>{if(confirm('Hapus semua data dan kembalikan ke contoh awal?')){S=seed();save();renderAll()}};
+
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x===b));
+ ['dash','scan','inv','log'].forEach(t=>document.getElementById('t-'+t).classList.toggle('hide',t!==b.dataset.t));
+ if(b.dataset.t!=='scan')stopCam();
+});
+renderAll();
+</script>
+</body>
+</html>
