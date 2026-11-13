@@ -1,181 +1,2034 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SiPinjam Bengkel TI</title>
-<style>
-:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
---bg:#f5f6f8;--card:#fff;--tx:#1b2430;--mu:#6b7686;--bd:#e2e6ec;--ac:#1d6fd8;--ok:#1a8f4c;--wn:#c77700;--er:#d33a3a;--okb:#e3f5ea;--wnb:#fff1dc;--erb:#fde6e6}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10151c;--card:#19212b;--tx:#e8edf3;--mu:#97a3b3;--bd:#2a3441;--ac:#5aa2ff;--ok:#4cc98a;--wn:#f0b255;--er:#ff7a7a;--okb:#16352a;--wnb:#3a2d14;--erb:#3d1f1f}}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{padding:18px 16px 8px;max-width:960px;margin:auto}
-h1{margin:0;font-size:20px}h1 small{display:block;font-size:13px;font-weight:400;color:var(--mu)}
-nav{display:flex;gap:6px;max-width:960px;margin:8px auto;padding:0 16px;overflow-x:auto}
-nav button{flex:1;min-width:90px;padding:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font:inherit;cursor:pointer}
-nav button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-main{max-width:960px;margin:auto;padding:8px 16px 40px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:12px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}
-.stat{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px}
-.stat b{display:block;font-size:26px}.stat span{color:var(--mu);font-size:13px}
-.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{text-align:left;padding:8px;border-bottom:1px solid var(--bd);white-space:nowrap}th{color:var(--mu);font-weight:600;font-size:12px;text-transform:uppercase}
-.b{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600}
-.tersedia{background:var(--okb);color:var(--ok)}.dipinjam{background:var(--wnb);color:var(--wn)}.telat{background:var(--erb);color:var(--er)}
-input,select,button.act{font:inherit;padding:9px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);width:100%}
-label{display:block;font-size:13px;color:var(--mu);margin:8px 0 3px}
-button.act{width:auto;background:var(--ac);color:#fff;border-color:var(--ac);cursor:pointer;font-weight:600}
-button.act.g{background:var(--card);color:var(--tx);border-color:var(--bd)}button.act.r{background:var(--er);border-color:var(--er)}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.row>*{flex:1;min-width:130px}.row>button{flex:0 0 auto}
-#reader{width:100%;max-width:380px;margin:10px auto 0;border-radius:10px;overflow:hidden}
-.msg{padding:10px;border-radius:8px;margin-top:10px;background:var(--wnb);color:var(--wn);font-size:14px}
-.qrg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.qi{border:1px dashed var(--bd);border-radius:10px;padding:10px;text-align:center;background:#fff;color:#111}
-.qi div.q{display:flex;justify-content:center;margin-bottom:6px}.qi b{display:block}.qi small{color:#555}
-.hide{display:none}
-@media print{header,nav,.card,.stats,#t-dash,#t-scan,#t-log,.noprint{display:none!important}#t-inv{display:block!important}body{background:#fff}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIP-BENGKEL TKJ — Sistem Peminjaman & Inventaris Alat Real-Time</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Library QR Code Generator (qrcodejs) & Kamera QR Scanner (html5-qrcode) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Pengaturan dasar & scroll halus */
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    /* Styling kontainer kamera html5-qrcode */
+    #qr-reader {
+      border: none !important;
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+    #qr-reader video {
+      border-radius: 0.75rem;
+      object-fit: cover;
+    }
+
+    /* Styling gambar/canvas QR Code agar terpusat rapi */
+    .qr-box img,
+    .qr-box canvas,
+    .qr-box svg {
+      margin: 0 auto;
+      display: block;
+    }
+
+    /* CSS Khusus Cetak Label QR (Tab 4) */
+    @media print {
+      body {
+        background: #ffffff !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-only-area {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .qr-sticker-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 12px !important;
+      }
+      .qr-sticker-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        border: 1.5px solid #0f172a !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
 </head>
-<body>
-<header><h1>SiPinjam Bengkel TI<small>Pencatatan peminjaman alat berbasis QR code</small></h1></header>
-<nav id="nav">
-<button data-t="dash" class="on">Dasbor</button><button data-t="scan">Scan QR</button><button data-t="inv">Inventaris</button><button data-t="log">Riwayat</button>
-</nav>
-<main>
-<section id="t-dash">
-<div class="stats" id="stats"></div>
-<div class="card"><b>Status alat real-time</b><div class="tw"><table id="dashTbl"></table></div></div>
-</section>
+<body class="min-h-screen flex flex-col antialiased selection:bg-indigo-600 selection:text-white">
 
-<section id="t-scan" class="hide">
-<div class="card">
-<b>Scan kode QR alat</b>
-<div class="row" style="margin-top:8px"><button class="act" id="camBtn">Buka kamera</button><button class="act g hide" id="stopBtn">Tutup kamera</button></div>
-<div id="reader"></div><div id="camMsg"></div>
-<label>Atau ketik kode alat secara manual</label>
-<div class="row"><input id="manual" placeholder="contoh: ALT-001"><button class="act g" id="manBtn">Cari</button></div>
-</div>
-<div class="card hide" id="result"></div>
-</section>
+  <!-- =====================================================================
+       1. HEADER & NAVIGASI TAB MODERN
+  ====================================================================== -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-md no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Baris Atas Header -->
+      <div class="py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <!-- Brand & Judul -->
+        <div class="flex items-start sm:items-center gap-3.5">
+          <div class="w-11 h-11 rounded-xl bg-indigo-600 flex items-center justify-center shrink-0 shadow-inner border border-indigo-400/30">
+            <!-- Ikon Jaringan / Bengkel TI -->
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-white">
+                SIP-BENGKEL TKJ
+              </h1>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                Live Real-Time Sync
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
+              Sistem Peminjaman &amp; Inventaris Alat Real-Time • Panel PLP &amp; Kepala Bengkel TI
+            </p>
+          </div>
+        </div>
 
-<section id="t-inv" class="hide">
-<div class="card noprint">
-<b>Tambah alat baru</b>
-<div class="row"><div><label>Nama alat</label><input id="inNama" placeholder="Multimeter Digital"></div>
-<div><label>Kategori</label><select id="inKat"><option>Alat Ukur</option><option>Perkakas</option><option>Perangkat</option><option>Lainnya</option></select></div>
-<button class="act" id="addBtn">Tambah</button></div>
-</div>
-<div class="row noprint" style="margin-bottom:10px"><button class="act g" onclick="window.print()">Cetak label QR</button></div>
-<div class="qrg" id="qrg"></div>
-</section>
+        <!-- Tombol Aksi Global & Jam Live -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div class="hidden sm:flex flex-col items-end mr-2 text-right">
+            <span id="liveClock" class="font-mono text-xs font-semibold text-indigo-300">--:--:-- WIB</span>
+            <span id="lastSyncText" class="text-[11px] text-slate-400">Sinkron otomatis aktif</span>
+          </div>
 
-<section id="t-log" class="hide">
-<div class="card"><b>Riwayat peminjaman</b><div class="tw"><table id="logTbl"></table></div></div>
-<button class="act r noprint" id="resetBtn">Reset semua data</button>
-</section>
-</main>
+          <button onclick="exportToCSV()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700 transition cursor-pointer">
+            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Ekspor Laporan (CSV)
+          </button>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script>
-const KEY='sipinjam_v1';
-const today=()=>new Date().toISOString().slice(0,10);
-const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
-const fmt=s=>s?new Date(s+'T00:00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'–';
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const seed=()=>({items:[
- {id:'ALT-001',nama:'Multimeter Digital',kat:'Alat Ukur',st:'tersedia'},
- {id:'ALT-002',nama:'Multimeter Analog',kat:'Alat Ukur',st:'tersedia'},
- {id:'ALT-003',nama:'Tang Crimping RJ45',kat:'Perkakas',st:'tersedia'},
- {id:'ALT-004',nama:'LAN Tester',kat:'Alat Ukur',st:'tersedia'},
- {id:'ALT-005',nama:'Laptop Praktik 01',kat:'Perangkat',st:'tersedia'},
- {id:'ALT-006',nama:'Laptop Praktik 02',kat:'Perangkat',st:'tersedia'}],logs:[]});
-let S;
-try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
-if(!S||!S.items)S=seed();
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
-const late=i=>i.st==='dipinjam'&&i.due<today();
-const badge=i=>late(i)?'<span class="b telat">Terlambat</span>':i.st==='dipinjam'?'<span class="b dipinjam">Dipinjam</span>':'<span class="b tersedia">Tersedia</span>';
+          <button onclick="openResetModal()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-rose-600/20 hover:bg-rose-600/30 text-rose-200 border border-rose-500/30 transition cursor-pointer">
+            <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Reset Data Demo
+          </button>
+        </div>
+      </div>
 
-function renderDash(){
- const n=S.items.length,p=S.items.filter(i=>i.st==='dipinjam').length,t=S.items.filter(late).length;
- document.getElementById('stats').innerHTML=
-  `<div class="stat"><b>${n}</b><span>Total alat</span></div><div class="stat"><b style="color:var(--ok)">${n-p}</b><span>Tersedia</span></div><div class="stat"><b style="color:var(--wn)">${p}</b><span>Sedang dipinjam</span></div><div class="stat"><b style="color:var(--er)">${t}</b><span>Terlambat</span></div>`;
- document.getElementById('dashTbl').innerHTML='<tr><th>Kode</th><th>Alat</th><th>Status</th><th>Peminjam</th><th>Jatuh tempo</th></tr>'+
-  S.items.map(i=>`<tr><td>${esc(i.id)}</td><td>${esc(i.nama)}</td><td>${badge(i)}</td><td>${i.st==='dipinjam'?esc(i.peminjam):'–'}</td><td>${i.st==='dipinjam'?fmt(i.due):'–'}</td></tr>`).join('');
-}
-function renderLog(){
- document.getElementById('logTbl').innerHTML='<tr><th>Alat</th><th>Peminjam</th><th>Pinjam</th><th>Tenggat</th><th>Kembali</th></tr>'+
-  (S.logs.length?S.logs.slice().reverse().map(l=>`<tr><td>${esc(l.nama)} (${esc(l.id)})</td><td>${esc(l.peminjam)}</td><td>${fmt(l.pinjam)}</td><td>${fmt(l.due)}</td><td>${l.kembali?fmt(l.kembali)+(l.kembali>l.due?' <span class="b telat">telat</span>':''):'<span class="b dipinjam">belum</span>'}</td></tr>`).join(''):'<tr><td colspan="5" style="color:var(--mu)">Belum ada riwayat.</td></tr>');
-}
-function renderInv(){
- const g=document.getElementById('qrg');g.innerHTML='';
- S.items.forEach(i=>{
-  const d=document.createElement('div');d.className='qi';
-  d.innerHTML=`<div class="q"></div><b>${esc(i.id)}</b><small>${esc(i.nama)}</small><div class="noprint" style="margin-top:6px"><button class="act g" style="padding:4px 10px;font-size:12px">Hapus</button></div>`;
-  g.appendChild(d);
-  try{new QRCode(d.querySelector('.q'),{text:i.id,width:110,height:110})}catch(e){}
-  d.querySelector('button').onclick=()=>{if(i.st==='dipinjam')return alert('Alat sedang dipinjam.');if(confirm('Hapus '+i.nama+'?')){S.items=S.items.filter(x=>x!==i);save();renderAll()}};
- });
-}
-function renderAll(){renderDash();renderLog();renderInv()}
+      <!-- Navigasi 4 Tab Utama -->
+      <nav class="flex gap-1.5 overflow-x-auto pb-3 pt-1" aria-label="Navigasi Utama">
+        <button id="tab-btn-dashboard" onclick="switchTab('dashboard')" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition cursor-pointer bg-indigo-600 text-white shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+          1. Dashboard Real-Time
+          <span id="navBadgeOverdue" class="hidden px-2 py-0.5 text-[11px] font-extrabold rounded-full bg-rose-500 text-white animate-pulse">0</span>
+        </button>
 
-function showItem(code){
- code=code.trim().toUpperCase();
- const i=S.items.find(x=>x.id===code),r=document.getElementById('result');r.classList.remove('hide');
- if(!i){r.innerHTML=`<div class="msg" style="margin:0">Kode “${esc(code)}” tidak ditemukan.</div>`;return}
- let h=`<b>${esc(i.nama)}</b> <small style="color:var(--mu)">${esc(i.id)} · ${esc(i.kat)}</small><div style="margin:6px 0">${badge(i)}</div>`;
- if(i.st==='tersedia'){
-  h+=`<label>Nama peminjam</label><input id="fNama" placeholder="Nama / kelas"><label>Tanggal kembali</label><input type="date" id="fDue" value="${addDays(3)}" min="${today()}"><div class="row" style="margin-top:10px"><button class="act" id="fGo">Pinjamkan</button></div>`;
- }else{
-  h+=`<div>Dipinjam oleh <b>${esc(i.peminjam)}</b> sejak ${fmt(i.tgl)}, tenggat ${fmt(i.due)}.</div><div class="row" style="margin-top:10px"><button class="act" id="fBack">Tandai dikembalikan</button></div>`;
- }
- r.innerHTML=h;
- if(i.st==='tersedia')document.getElementById('fGo').onclick=()=>{
-  const n=document.getElementById('fNama').value.trim(),d=document.getElementById('fDue').value;
-  if(!n||!d)return alert('Isi nama peminjam dan tanggal kembali.');
-  Object.assign(i,{st:'dipinjam',peminjam:n,tgl:today(),due:d});
-  S.logs.push({id:i.id,nama:i.nama,peminjam:n,pinjam:today(),due:d,kembali:null});
-  save();renderAll();showItem(i.id)};
- else document.getElementById('fBack').onclick=()=>{
-  const l=S.logs.slice().reverse().find(x=>x.id===i.id&&!x.kembali);if(l)l.kembali=today();
-  Object.assign(i,{st:'tersedia',peminjam:null,due:null,tgl:null});save();renderAll();showItem(i.id)};
-}
+        <button id="tab-btn-pinjam" onclick="switchTab('pinjam')" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition cursor-pointer text-slate-300 hover:bg-slate-800 hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+          </svg>
+          2. Transaksi Pinjam (Scan QR)
+        </button>
 
-let scanner=null;
-async function stopCam(){
- try{if(scanner){await scanner.stop();scanner.clear()}}catch(e){}
- scanner=null;document.getElementById('stopBtn').classList.add('hide');document.getElementById('camBtn').classList.remove('hide');
-}
-document.getElementById('camBtn').onclick=async()=>{
- const m=document.getElementById('camMsg');m.innerHTML='';
- try{
-  scanner=new Html5Qrcode('reader');
-  await scanner.start({facingMode:'environment'},{fps:10,qrbox:220},txt=>{showItem(txt);stopCam()},()=>{});
-  document.getElementById('stopBtn').classList.remove('hide');document.getElementById('camBtn').classList.add('hide');
- }catch(e){scanner=null;m.innerHTML='<div class="msg">Kamera tidak dapat diakses (izin ditolak atau tidak tersedia). Gunakan input manual di bawah.</div>'}
-};
-document.getElementById('stopBtn').onclick=stopCam;
-document.getElementById('manBtn').onclick=()=>{const v=document.getElementById('manual').value;if(v.trim())showItem(v)};
-document.getElementById('manual').onkeydown=e=>{if(e.key==='Enter')document.getElementById('manBtn').click()};
+        <button id="tab-btn-kembali" onclick="switchTab('kembali')" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition cursor-pointer text-slate-300 hover:bg-slate-800 hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          3. Pengembalian &amp; Riwayat
+          <span id="navBadgeActive" class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-slate-700 text-indigo-200">0</span>
+        </button>
 
-document.getElementById('addBtn').onclick=()=>{
- const n=document.getElementById('inNama').value.trim();if(!n)return;
- const max=S.items.reduce((a,i)=>Math.max(a,parseInt(i.id.split('-')[1])||0),0)+1;
- S.items.push({id:'ALT-'+String(max).padStart(3,'0'),nama:n,kat:document.getElementById('inKat').value,st:'tersedia'});
- document.getElementById('inNama').value='';save();renderAll();
-};
-document.getElementById('resetBtn').onclick=()=>{if(confirm('Hapus semua data dan kembalikan ke contoh awal?')){S=seed();save();renderAll()}};
+        <button id="tab-btn-master" onclick="switchTab('master')" class="tab-btn flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition cursor-pointer text-slate-300 hover:bg-slate-800 hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          4. Master Alat &amp; Cetak QR
+        </button>
+      </nav>
+    </div>
+  </header>
 
-document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>{
- document.querySelectorAll('#nav button').forEach(x=>x.classList.toggle('on',x===b));
- ['dash','scan','inv','log'].forEach(t=>document.getElementById('t-'+t).classList.toggle('hide',t!==b.dataset.t));
- if(b.dataset.t!=='scan')stopCam();
-});
-renderAll();
-</script>
+  <!-- =====================================================================
+       KONTEN UTAMA APLIKASI
+  ====================================================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ===================================================================
+         TAB 1: DASHBOARD REAL-TIME (PANTAUAN KEPALA BENGKEL & PLP)
+    ==================================================================== -->
+    <section id="view-dashboard" class="tab-view space-y-6">
+      <!-- Banner Peringatan Keterlambatan (Muncul otomatis jika ada alat terlambat) -->
+      <div id="overdueAlertBanner" class="hidden bg-rose-50 border-2 border-rose-500 rounded-2xl p-4 sm:p-5 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-start gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 animate-bounce">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-base sm:text-lg font-extrabold text-rose-900">
+                  PERINGATAN KETERLAMBATAN PENGEMBALIAN ALAT!
+                </h2>
+                <span class="px-2 py-0.5 text-xs font-bold rounded-full bg-rose-600 text-white animate-pulse">OVERDUE</span>
+              </div>
+              <div id="overdueAlertList" class="text-sm text-rose-800 mt-1 space-y-1"></div>
+            </div>
+          </div>
+          <button onclick="switchTab('kembali')" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold shadow-sm transition shrink-0 cursor-pointer">
+            Tindak Lanjuti Pengembalian &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Kartu Statistik Real-Time -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Kartu 1: Total Unit Alat -->
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Unit Alat</p>
+            <p id="statTotal" class="text-3xl font-extrabold text-slate-900 mt-1">0</p>
+            <p class="text-xs text-slate-500 mt-1">Terdaftar di database bengkel</p>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Kartu 2: Alat Tersedia (Hijau) -->
+        <div class="bg-white rounded-2xl p-5 border border-emerald-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">Alat Tersedia</p>
+            <p id="statAvailable" class="text-3xl font-extrabold text-emerald-600 mt-1">0</p>
+            <p class="text-xs text-emerald-700/80 mt-1">Siap dipinjam untuk praktik</p>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Kartu 3: Sedang Dipinjam (Biru/Kuning) -->
+        <div class="bg-white rounded-2xl p-5 border border-amber-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-wider text-amber-700">Sedang Dipinjam</p>
+            <p id="statBorrowed" class="text-3xl font-extrabold text-amber-600 mt-1">0</p>
+            <p class="text-xs text-amber-700/80 mt-1">Sedang digunakan di lab/kelas</p>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Kartu 4: Terlambat Kembali / Overdue (Merah + Animasi Badge) -->
+        <div id="cardStatOverdue" class="bg-white rounded-2xl p-5 border border-rose-200 shadow-sm flex items-center justify-between transition">
+          <div>
+            <div class="flex items-center gap-2">
+              <p class="text-xs font-bold uppercase tracking-wider text-rose-700">Terlambat Kembali</p>
+              <span id="overdueCardBadge" class="hidden px-2 py-0.5 text-[10px] font-extrabold rounded-full bg-rose-600 text-white animate-pulse">PERHATIAN</span>
+            </div>
+            <p id="statOverdue" class="text-3xl font-extrabold text-rose-600 mt-1">0</p>
+            <p class="text-xs text-rose-700/80 mt-1">Melewati batas waktu kembali</p>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabel Ketersediaan Alat Real-Time -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-slate-200 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900">Ketersediaan Alat Bengkel TKJ (Real-Time)</h2>
+            <p class="text-xs sm:text-sm text-slate-500">Pantauan langsung Kepala Bengkel &amp; PLP terhadap seluruh unit inventaris</p>
+          </div>
+
+          <!-- Filter Pencarian & Status -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <!-- Pencarian -->
+            <div class="relative">
+              <input type="text" id="dashboardSearch" oninput="renderDashboard()" placeholder="Cari kode, nama alat, rak..." class="w-full sm:w-64 pl-9 pr-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+              <svg class="w-4 h-4 text-slate-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+
+            <!-- Filter Status -->
+            <div class="flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl">
+              <button onclick="setDashboardFilter('Semua')" data-filter="Semua" class="dash-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-sm cursor-pointer">Semua</button>
+              <button onclick="setDashboardFilter('Tersedia')" data-filter="Tersedia" class="dash-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer">Tersedia</button>
+              <button onclick="setDashboardFilter('Dipinjam')" data-filter="Dipinjam" class="dash-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer">Dipinjam</button>
+              <button onclick="setDashboardFilter('Rusak')" data-filter="Rusak" class="dash-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer">Rusak</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                <th class="py-3.5 px-4">Kode Aset</th>
+                <th class="py-3.5 px-4">Nama Alat Praktik</th>
+                <th class="py-3.5 px-4">Kategori</th>
+                <th class="py-3.5 px-4">Lokasi Rak</th>
+                <th class="py-3.5 px-4">Keterangan / Peminjam</th>
+                <th class="py-3.5 px-4">Status Real-Time</th>
+                <th class="py-3.5 px-4 text-right">Aksi Cepat</th>
+              </tr>
+            </thead>
+            <tbody id="dashboardTableBody" class="divide-y divide-slate-200 text-sm">
+              <!-- Diisi otomatis oleh JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         TAB 2: TRANSAKSI PEMINJAMAN DENGAN FITUR SCAN QR CODE
+    ==================================================================== -->
+    <section id="view-pinjam" class="tab-view hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- KOLOM KIRI (7 Kolom): Dual-Mode QR Scanner & Simulasi Klik QR -->
+        <div class="lg:col-span-7 space-y-6">
+          <!-- Panel A: Kamera QR Scanner & Input Cepat -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div>
+                <h2 class="text-lg font-extrabold text-slate-900 flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
+                  Pemindai QR Code (Kamera &amp; Barcode Scanner)
+                </h2>
+                <p class="text-xs text-slate-500">Pindai QR Kartu Anggota dan Stiker Alat secara berurutan</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="btnStartCamera" onclick="startQrCamera()" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition cursor-pointer">
+                  Mulai Kamera
+                </button>
+                <button id="btnStopCamera" onclick="stopQrCamera()" class="hidden px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm transition cursor-pointer">
+                  Hentikan Kamera
+                </button>
+              </div>
+            </div>
+
+            <!-- Area Kamera QR -->
+            <div id="cameraWrapper" class="hidden bg-slate-900 rounded-xl p-3">
+              <div id="qr-reader" class="w-full max-w-md mx-auto"></div>
+              <p class="text-center text-xs text-slate-300 mt-2">Arahkan QR Code Kartu Siswa/Guru atau Stiker Alat ke bingkai kamera</p>
+            </div>
+
+            <!-- Pesan Status / Error Kamera -->
+            <div id="cameraErrorBox" class="hidden bg-amber-50 border border-amber-300 text-amber-900 rounded-xl p-3.5 text-xs space-y-1">
+              <p class="font-bold">Info Kamera Perangkat:</p>
+              <p id="cameraErrorMessage">Kamera tidak terdeteksi atau izin ditolak.</p>
+              <p class="text-amber-700">Gunakan <b>Input Cepat Scanner</b> atau klik kartu <b>Simulasi QR</b> di bawah untuk menguji sistem.</p>
+            </div>
+
+            <!-- Input Cepat / Barcode Scanner Fisik -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+              <label for="quickScanInput" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Input Cepat Scanner Fisik / Ketik Kode QR (Tekan Enter)
+              </label>
+              <div class="flex gap-2">
+                <input type="text" id="quickScanInput" onkeydown="if(event.key==='Enter'){ event.preventDefault(); processManualScan(); }" placeholder="Contoh: SISWA-101 atau MLT-001..." class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <button onclick="processManualScan()" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold transition cursor-pointer">
+                  Pindai
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel B: Simulasi Kartu & Stiker QR (Klik 1x untuk Scan) -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+            <div class="border-b border-slate-100 pb-3">
+              <h3 class="text-base font-extrabold text-slate-900">Simulasi Kartu &amp; Stiker QR (Klik untuk Scan)</h3>
+              <p class="text-xs text-slate-500">Klik kartu anggota atau stiker alat di bawah ini untuk mensimulasikan hasil pemindaian QR Code secara instan</p>
+            </div>
+
+            <!-- Sub-bagian: Kartu Anggota (Siswa & Guru) -->
+            <div>
+              <p class="text-xs font-bold uppercase tracking-wider text-indigo-700 mb-2.5">1. Kartu Peminjam (Siswa / Guru)</p>
+              <div id="simMemberQrGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <!-- Dirender via JS -->
+              </div>
+            </div>
+
+            <!-- Sub-bagian: Stiker Alat Tersedia -->
+            <div class="pt-2">
+              <p class="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-2.5">2. Stiker QR Alat Tersedia (Klik untuk Tambah ke Daftar)</p>
+              <div id="simToolQrGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <!-- Dirender via JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KOLOM KANAN (5 Kolom): Formulir Transaksi Otomatis Terisi -->
+        <div class="lg:col-span-5">
+          <div class="bg-white rounded-2xl border-2 border-indigo-100 shadow-sm p-5 sm:p-6 space-y-5 sticky top-28">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h2 class="text-lg font-extrabold text-slate-900">Formulir Peminjaman Alat</h2>
+                <p class="text-xs text-slate-500">Terisi otomatis saat QR dipindai</p>
+              </div>
+              <button onclick="clearLoanForm()" class="text-xs font-semibold text-slate-500 hover:text-rose-600 cursor-pointer">
+                Bersihkan Form
+              </button>
+            </div>
+
+            <!-- Data Peminjam -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Identitas Peminjam <span class="text-rose-600">*</span>
+              </label>
+              <div id="selectedBorrowerCard" class="p-3.5 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-sm text-slate-500 flex items-center justify-between">
+                <span>Belum ada kartu anggota dipindai...</span>
+              </div>
+              <!-- Dropdown alternatif jika PLP memilih manual -->
+              <select id="manualBorrowerSelect" onchange="selectBorrowerFromDropdown(this.value)" class="mt-2 w-full px-3 py-2 rounded-xl border border-slate-300 text-xs text-slate-700 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">-- Atau pilih peminjam secara manual --</option>
+              </select>
+            </div>
+
+            <!-- Daftar Alat yang Dipinjam (Multi-item) -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="text-xs font-bold uppercase tracking-wider text-slate-700">
+                  Daftar Alat Dipinjam (<span id="loanCartCount">0</span> Unit) <span class="text-rose-600">*</span>
+                </label>
+              </div>
+              <div id="loanCartList" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                <div class="p-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center text-xs text-slate-500">
+                  Pindai stiker QR alat (misal: MLT-001, CRM-001) untuk menambahkan ke daftar pinjam.
+                </div>
+              </div>
+            </div>
+
+            <!-- Keperluan Praktikum -->
+            <div>
+              <label for="loanPurpose" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Keperluan Praktikum / Mata Pelajaran <span class="text-rose-600">*</span>
+              </label>
+              <input type="text" id="loanPurpose" placeholder="Contoh: Praktik Crimping Kabel UTP" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              <div class="flex flex-wrap gap-1.5 mt-2">
+                <button type="button" onclick="setPurpose('Praktik Crimping Kabel UTP')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[11px] font-medium text-slate-600 transition cursor-pointer">Crimping UTP</button>
+                <button type="button" onclick="setPurpose('Pengukuran Tegangan PSU')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[11px] font-medium text-slate-600 transition cursor-pointer">Ukur Tegangan PSU</button>
+                <button type="button" onclick="setPurpose('Konfigurasi Router MikroTik')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[11px] font-medium text-slate-600 transition cursor-pointer">Konfigurasi Mikrotik</button>
+              </div>
+            </div>
+
+            <!-- Batas Waktu Kembali -->
+            <div>
+              <label for="loanDuration" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                Batas Waktu Pengembalian <span class="text-rose-600">*</span>
+              </label>
+              <select id="loanDuration" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold text-slate-800 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="60">1 Jam dari sekarang (1 Jam Pelajaran)</option>
+                <option value="120" selected>2 Jam dari sekarang (1 Sesi Praktik)</option>
+                <option value="eod">Akhir Hari Ini (Pukul 16:00 WIB)</option>
+                <option value="-120">Simulasi Jatuh Tempo Lewat (-2 Jam) [Uji Overdue]</option>
+              </select>
+            </div>
+
+            <!-- Tombol Simpan Transaksi -->
+            <button onclick="submitLoanTransaction()" class="w-full py-3.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              Simpan Transaksi Peminjaman
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         TAB 3: PENGEMBALIAN ALAT & LOG RIWAYAT PERMANEN
+    ==================================================================== -->
+    <section id="view-kembali" class="tab-view hidden space-y-6">
+      <!-- Bar Atas: Scan QR Pengembalian Cepat -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900">Scan QR Pengembalian Alat</h2>
+            <p class="text-xs sm:text-sm text-slate-500">Pindai kode QR pada alat yang dikembalikan siswa/guru untuk memverifikasi kondisi dan waktu kembali</p>
+          </div>
+          <div class="flex gap-2 w-full md:w-auto">
+            <input type="text" id="returnScanInput" onkeydown="if(event.key==='Enter'){ event.preventDefault(); processReturnScan(); }" placeholder="Pindai / ketik kode alat (misal: MLT-002)..." class="flex-1 md:w-72 px-3.5 py-2.5 rounded-xl border border-slate-300 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <button onclick="processReturnScan()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold transition cursor-pointer">
+              Cek Alat
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daftar Transaksi Sedang Aktif -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+          <div>
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Daftar Peminjaman Aktif (Belum Kembali)</h3>
+            <p class="text-xs text-slate-500">Klik "Proses Kembali" untuk mencatat pengembalian dan pemeriksaan fisik alat</p>
+          </div>
+          <span id="activeLoansBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">0 Aktif</span>
+        </div>
+
+        <div id="activeLoansContainer" class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Kartu transaksi aktif dirender via JS -->
+        </div>
+      </div>
+
+      <!-- Tabel Log Riwayat Permanen -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Log Riwayat Peminjaman Permanen</h3>
+            <p class="text-xs text-slate-500">Arsip digital anti-hilang seluruh sirkulasi alat bengkel TKJ / TI</p>
+          </div>
+          <input type="text" id="historySearch" oninput="renderHistoryTable()" placeholder="Cari riwayat peminjam atau alat..." class="w-full sm:w-64 px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                <th class="py-3.5 px-4">ID &amp; Waktu Pinjam</th>
+                <th class="py-3.5 px-4">Peminjam</th>
+                <th class="py-3.5 px-4">Alat &amp; Keperluan</th>
+                <th class="py-3.5 px-4">Batas &amp; Waktu Kembali</th>
+                <th class="py-3.5 px-4">Ketepatan Waktu</th>
+                <th class="py-3.5 px-4">Kondisi Akhir &amp; Catatan</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody" class="divide-y divide-slate-200 text-sm">
+              <!-- Dirender via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         TAB 4: MASTER ALAT & GENERATOR LABEL QR CODE
+    ==================================================================== -->
+    <section id="view-master" class="tab-view hidden space-y-6">
+      <!-- Form Tambah Alat Baru -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 no-print">
+        <div class="border-b border-slate-100 pb-3 mb-4">
+          <h2 class="text-lg font-extrabold text-slate-900">Tambah Inventaris Alat Baru &amp; Generate QR Code</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Setiap unit alat memiliki Kode Aset Unik untuk pelacakan akurat dan stiker QR siap tempel</p>
+        </div>
+
+        <form onsubmit="handleAddNewTool(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+          <div>
+            <label for="newToolCode" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Kode Aset Unik *</label>
+            <input type="text" id="newToolCode" required placeholder="Misal: MLT-003" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 font-mono text-sm uppercase focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+
+          <div class="lg:col-span-2">
+            <label for="newToolName" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Nama &amp; Spesifikasi Alat *</label>
+            <input type="text" id="newToolName" required placeholder="Misal: Tang Crimping UTP Cat6" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+
+          <div>
+            <label for="newToolCategory" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Kategori *</label>
+            <select id="newToolCategory" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="Alat Ukur">Alat Ukur</option>
+              <option value="Peralatan Jaringan">Peralatan Jaringan</option>
+              <option value="Perangkat Komputer">Perangkat Komputer</option>
+              <option value="Perangkat Jaringan Aktif">Perangkat Jaringan Aktif</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="newToolRack" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Lokasi Rak *</label>
+            <input type="text" id="newToolRack" required placeholder="Misal: Rak A-02" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          </div>
+
+          <div class="sm:col-span-2 lg:col-span-5 flex justify-end pt-1">
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold shadow-sm transition flex items-center gap-2 cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Simpan Alat &amp; Buat QR Code
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Galeri Stiker QR Code Siap Cetak -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 print-only-area">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-5 no-print">
+          <div>
+            <h3 class="text-lg font-extrabold text-slate-900">Galeri Stiker Label QR Code Inventaris</h3>
+            <p class="text-xs sm:text-sm text-slate-500">Cetak label ini untuk ditempel pada fisik multimeter, tang crimping, laptop, dan perangkat jaringan</p>
+          </div>
+          <button onclick="window.print()" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold shadow-sm transition flex items-center gap-2 self-start sm:self-auto cursor-pointer">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Cetak Semua Label QR
+          </button>
+        </div>
+
+        <!-- Grid Label QR -->
+        <div id="qrLabelsGallery" class="qr-sticker-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <!-- Dirender via JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =====================================================================
+       MODAL KONFIRMASI PENGEMBALIAN ALAT
+  ====================================================================== -->
+  <div id="returnModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-lg w-full border border-slate-200 shadow-2xl overflow-hidden">
+      <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+        <h3 class="text-base font-extrabold">Konfirmasi Pengembalian Alat</h3>
+        <button onclick="closeReturnModal()" class="text-slate-400 hover:text-white cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4">
+        <!-- Info Transaksi & Alat -->
+        <div id="returnModalSummary" class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2 text-sm">
+          <!-- Diisi via JS -->
+        </div>
+
+        <!-- Status Ketepatan Waktu Otomatis -->
+        <div id="returnModalPunctuality" class="rounded-xl p-3.5 text-sm font-bold flex items-center justify-between">
+          <!-- Diisi via JS -->
+        </div>
+
+        <!-- Pilihan Kondisi Alat Saat Kembali -->
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+            Kondisi Fisik Alat Saat Dikembalikan *
+          </label>
+          <div class="grid grid-cols-3 gap-2.5">
+            <label class="cursor-pointer">
+              <input type="radio" name="returnCondition" value="Baik" checked class="peer sr-only" />
+              <div class="p-3 rounded-xl border-2 border-slate-200 peer-checked:border-emerald-600 peer-checked:bg-emerald-50 text-center transition">
+                <p class="text-xs font-extrabold text-slate-800">Baik</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Siap pakai</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="returnCondition" value="Rusak Ringan" class="peer sr-only" />
+              <div class="p-3 rounded-xl border-2 border-slate-200 peer-checked:border-amber-600 peer-checked:bg-amber-50 text-center transition">
+                <p class="text-xs font-extrabold text-slate-800">Rusak Ringan</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Perlu servis</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="returnCondition" value="Rusak Berat" class="peer sr-only" />
+              <div class="p-3 rounded-xl border-2 border-slate-200 peer-checked:border-rose-600 peer-checked:bg-rose-50 text-center transition">
+                <p class="text-xs font-extrabold text-slate-800">Rusak Berat</p>
+                <p class="text-[11px] text-slate-500 mt-0.5">Tidak berfungsi</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Catatan PLP -->
+        <div>
+          <label for="returnNotes" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+            Catatan Pemeriksaan PLP (Opsional / Wajib jika rusak)
+          </label>
+          <textarea id="returnNotes" rows="2" placeholder="Contoh: Kelengkapan kabel probe lengkap, baterai aman..." class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2.5 pt-2">
+          <button onclick="closeReturnModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-50 cursor-pointer">
+            Batal
+          </button>
+          <button onclick="confirmReturnSubmit()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-extrabold shadow-sm cursor-pointer">
+            Konfirmasi Pengembalian
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL KONFIRMASI RESET DATA DEMO
+  ====================================================================== -->
+  <div id="resetModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-2xl max-w-md w-full border border-slate-200 shadow-2xl p-6 space-y-4">
+      <div class="flex items-center gap-3 text-rose-600">
+        <div class="w-10 h-10 rounded-xl bg-rose-100 flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-extrabold text-slate-900">Reset ke Data Awal Demo?</h3>
+      </div>
+      <p class="text-sm text-slate-600">
+        Seluruh transaksi baru akan dihapus dan dikembalikan ke skenario awal studi kasus (8 unit alat bengkel, 1 transaksi aktif, dan 1 transaksi terlambat).
+      </p>
+      <div class="flex justify-end gap-2.5 pt-2">
+        <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-50 cursor-pointer">
+          Batal
+        </button>
+        <button onclick="executeResetDemo()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold cursor-pointer">
+          Ya, Reset Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       TOAST NOTIFICATION CONTAINER (PENGGANTI ALERT)
+  ====================================================================== -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none no-print"></div>
+
+  <!-- =====================================================================
+       LOGIKA JAVASCRIPT APLIKASI (STORAGE, QR SCANNER, REAL-TIME SYNC)
+  ====================================================================== -->
+  <script>
+    // Kunci penyimpanan localStorage
+    const STORAGE_KEYS = {
+      TOOLS: 'sip_bengkel_tools_v1',
+      MEMBERS: 'sip_bengkel_members_v1',
+      TRANSACTIONS: 'sip_bengkel_transactions_v1',
+    };
+
+    // State aplikasi
+    let state = {
+      tools: [],
+      members: [],
+      transactions: [],
+      currentTab: 'dashboard',
+      dashboardFilter: 'Semua',
+      selectedBorrowerId: null,
+      loanCart: [], // Array kode aset yang akan dipinjam
+      activeReturnContext: null, // { txId, toolCode }
+      html5QrInstance: null,
+      isCameraRunning: false,
+      lastScanTimestamp: 0,
+      lastScannedCode: '',
+    };
+
+    // =========================================================================
+    // 1. DATA AWAL (SEED DATA STUDI KASUS BENGKEL TKJ / TI)
+    // =========================================================================
+    function getSeedData() {
+      const now = Date.now();
+      const hour = 60 * 60 * 1000;
+
+      const members = [
+        { id: 'SISWA-101', name: 'Ahmad Fauzi', role: 'Siswa • XII TKJ 1' },
+        { id: 'SISWA-102', name: 'Nadya Putri', role: 'Siswa • XI TKJ 2' },
+        { id: 'GURU-01', name: 'Pak Hendra, S.Kom', role: 'Guru • Instruktur Jaringan' },
+      ];
+
+      const tools = [
+        { code: 'MLT-001', name: 'Multimeter Digital Fluke', category: 'Alat Ukur', rack: 'Rak A-01', status: 'Tersedia', note: '' },
+        { code: 'MLT-002', name: 'Multimeter Analog Sanwa', category: 'Alat Ukur', rack: 'Rak A-01', status: 'Dipinjam', note: '' },
+        { code: 'CRM-001', name: 'Tang Crimping RJ45 Krisbow', category: 'Peralatan Jaringan', rack: 'Rak B-01', status: 'Tersedia', note: '' },
+        { code: 'CRM-002', name: "Tang Crimping Pro'sKit", category: 'Peralatan Jaringan', rack: 'Rak B-01', status: 'Tersedia', note: '' },
+        { code: 'LAP-001', name: 'Laptop Praktik ThinkPad X280', category: 'Perangkat Komputer', rack: 'Lemari Besi 1', status: 'Dipinjam', note: '' },
+        { code: 'LAP-002', name: 'Laptop Praktik Asus Vivobook', category: 'Perangkat Komputer', rack: 'Lemari Besi 1', status: 'Tersedia', note: '' },
+        { code: 'LNT-001', name: 'LAN Cable Tester Noyafa', category: 'Peralatan Jaringan', rack: 'Rak B-02', status: 'Tersedia', note: '' },
+        { code: 'RTR-001', name: 'Router MikroTik RB941', category: 'Perangkat Jaringan Aktif', rack: 'Rak C-01', status: 'Tersedia', note: '' },
+      ];
+
+      const transactions = [
+        // 1. Transaksi Sudah Terlambat (Overdue -2 jam) -> Efek peringatan langsung terlihat
+        {
+          id: 'TRX-2026-001',
+          borrowerId: 'SISWA-102',
+          borrowerName: 'Nadya Putri',
+          borrowerRole: 'Siswa • XI TKJ 2',
+          purpose: 'Pengukuran Tegangan PSU Komputer',
+          borrowedAt: now - 4 * hour,
+          dueAt: now - 2 * hour,
+          status: 'Aktif',
+          items: [
+            {
+              code: 'MLT-002',
+              name: 'Multimeter Analog Sanwa',
+              returnedAt: null,
+              condition: null,
+              returnNote: '',
+            },
+          ],
+        },
+        // 2. Transaksi Sedang Aktif (Masih dalam batas waktu)
+        {
+          id: 'TRX-2026-002',
+          borrowerId: 'SISWA-101',
+          borrowerName: 'Ahmad Fauzi',
+          borrowerRole: 'Siswa • XII TKJ 1',
+          purpose: 'Simulasi Topologi VLAN & Routing',
+          borrowedAt: now - 0.5 * hour,
+          dueAt: now + 1.5 * hour,
+          status: 'Aktif',
+          items: [
+            {
+              code: 'LAP-001',
+              name: 'Laptop Praktik ThinkPad X280',
+              returnedAt: null,
+              condition: null,
+              returnNote: '',
+            },
+          ],
+        },
+        // 3. Riwayat Selesai (Contoh arsip permanen)
+        {
+          id: 'TRX-2026-000',
+          borrowerId: 'GURU-01',
+          borrowerName: 'Pak Hendra, S.Kom',
+          borrowerRole: 'Guru • Instruktur Jaringan',
+          purpose: 'Demo Instalasi Kabel Straight & Cross',
+          borrowedAt: now - 26 * hour,
+          dueAt: now - 24 * hour,
+          status: 'Selesai',
+          items: [
+            {
+              code: 'CRM-001',
+              name: 'Tang Crimping RJ45 Krisbow',
+              returnedAt: now - 24.3 * hour,
+              condition: 'Baik',
+              returnNote: 'Lengkap dan bersih',
+            },
+            {
+              code: 'LNT-001',
+              name: 'LAN Cable Tester Noyafa',
+              returnedAt: now - 24.3 * hour,
+              condition: 'Baik',
+              returnNote: 'Indikator LED berfungsi normal',
+            },
+          ],
+        },
+      ];
+
+      return { tools, members, transactions };
+    }
+
+    // =========================================================================
+    // 2. MANAJEMEN PENYIMPANAN & SINKRONISASI REAL-TIME
+    // =========================================================================
+    function loadFromStorage() {
+      try {
+        const rawTools = localStorage.getItem(STORAGE_KEYS.TOOLS);
+        const rawMembers = localStorage.getItem(STORAGE_KEYS.MEMBERS);
+        const rawTx = localStorage.getItem(STORAGE_KEYS.TRANSACTIONS);
+
+        if (!rawTools || !rawMembers || !rawTx) {
+          const seed = getSeedData();
+          state.tools = seed.tools;
+          state.members = seed.members;
+          state.transactions = seed.transactions;
+          saveToStorage();
+        } else {
+          state.tools = JSON.parse(rawTools);
+          state.members = JSON.parse(rawMembers);
+          state.transactions = JSON.parse(rawTx);
+        }
+      } catch (err) {
+        console.error('Gagal membaca localStorage:', err);
+        const seed = getSeedData();
+        state.tools = seed.tools;
+        state.members = seed.members;
+        state.transactions = seed.transactions;
+      }
+    }
+
+    function saveToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEYS.TOOLS, JSON.stringify(state.tools));
+        localStorage.setItem(STORAGE_KEYS.MEMBERS, JSON.stringify(state.members));
+        localStorage.setItem(STORAGE_KEYS.TRANSACTIONS, JSON.stringify(state.transactions));
+        updateLastSyncIndicator();
+      } catch (err) {
+        showToast('Gagal menyimpan data ke penyimpanan lokal browser.', 'error');
+      }
+    }
+
+    // Mendengarkan perubahan storage dari tab browser lain (misal layar Kepala Bengkel vs PLP)
+    window.addEventListener('storage', (e) => {
+      if (Object.values(STORAGE_KEYS).includes(e.key)) {
+        loadFromStorage();
+        refreshAllViews();
+        showToast('Data diperbarui secara real-time dari sesi lain.', 'info');
+      }
+    });
+
+    function updateLastSyncIndicator() {
+      const el = document.getElementById('lastSyncText');
+      if (el) {
+        const now = new Date();
+        el.textContent = `Tersinkron: ${now.toLocaleTimeString('id-ID')}`;
+      }
+    }
+
+    // =========================================================================
+    // 3. HELPER FORMAT WAKTU, SUARA BEEP & QR GENERATOR
+    // =========================================================================
+    function formatDateTime(ts) {
+      if (!ts) return '-';
+      const d = new Date(ts);
+      return d.toLocaleString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+      }) + ' WIB';
+    }
+
+    function formatDurationDiff(msDiff) {
+      const absMs = Math.abs(msDiff);
+      const totalMinutes = Math.floor(absMs / 60000);
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      if (hours > 0) {
+        return `${hours} jam ${minutes} menit`;
+      }
+      return `${minutes} menit`;
+    }
+
+    // Bunyi beep halus menggunakan Web Audio API saat QR berhasil dipindai
+    function playScanBeep() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.12);
+      } catch (e) {
+        // Abaikan jika browser membatasi audio otomatis
+      }
+    }
+
+    // Generator QR Code dengan fallback SVG deterministik jika CDN offline
+    function renderQRCodeElement(container, text, size = 84) {
+      container.innerHTML = '';
+      if (typeof window.QRCode !== 'undefined') {
+        try {
+          new QRCode(container, {
+            text: text,
+            width: size,
+            height: size,
+            colorDark: '#0f172a',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.M,
+          });
+          return;
+        } catch (e) {
+          console.warn('Fallback ke SVG QR:', e);
+        }
+      }
+
+      // Fallback SVG QR Pattern jika library eksternal terblokir
+      let hash = 0;
+      for (let i = 0; i < text.length; i++) {
+        hash = (hash << 5) - hash + text.charCodeAt(i);
+        hash |= 0;
+      }
+      const cells = 11;
+      let rects = '';
+      for (let r = 0; r < cells; r++) {
+        for (let c = 0; c < cells; c++) {
+          const isFinder =
+            (r < 3 && c < 3) ||
+            (r < 3 && c >= cells - 3) ||
+            (r >= cells - 3 && c < 3);
+          const bit = ((hash >> ((r * cells + c) % 24)) & 1) === 1;
+          if (isFinder || bit) {
+            rects += `<rect x="${c}" y="${r}" width="1" height="1" fill="#0f172a"/>`;
+          }
+        }
+      }
+      container.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 ${cells} ${cells}" shape-rendering="crispEdges">${rects}</svg>`;
+    }
+
+    // =========================================================================
+    // 4. NOTIFIKASI TOAST & NAVIGASI TAB
+    // =========================================================================
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const colors = {
+        success: 'bg-emerald-900 border-emerald-500 text-white',
+        error: 'bg-rose-900 border-rose-500 text-white',
+        warning: 'bg-amber-900 border-amber-500 text-white',
+        info: 'bg-slate-900 border-indigo-500 text-white',
+      };
+
+      toast.className = `pointer-events-auto border-l-4 ${colors[type] || colors.info} px-4 py-3 rounded-xl shadow-xl text-xs sm:text-sm font-semibold flex items-center justify-between gap-3 transition-all duration-300`;
+      toast.innerHTML = `
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()" class="text-white/70 hover:text-white font-bold cursor-pointer">&times;</button>
+      `;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+      }, 4200);
+    }
+
+    function switchTab(tabName) {
+      // Hentikan kamera jika berpindah dari tab pinjam
+      if (state.currentTab === 'pinjam' && tabName !== 'pinjam' && state.isCameraRunning) {
+        stopQrCamera();
+      }
+
+      state.currentTab = tabName;
+
+      // Update tampilan tombol tab
+      document.querySelectorAll('.tab-btn').forEach((btn) => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm', 'font-bold');
+        btn.classList.add('text-slate-300', 'hover:bg-slate-800', 'hover:text-white', 'font-semibold');
+      });
+      const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-300', 'hover:bg-slate-800', 'hover:text-white', 'font-semibold');
+        activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm', 'font-bold');
+      }
+
+      // Tampilkan section yang dipilih
+      document.querySelectorAll('.tab-view').forEach((sec) => sec.classList.add('hidden'));
+      const activeView = document.getElementById(`view-${tabName}`);
+      if (activeView) activeView.classList.remove('hidden');
+
+      // Fokus input otomatis untuk kenyamanan PLP
+      if (tabName === 'pinjam') {
+        renderLoanTab();
+        setTimeout(() => document.getElementById('quickScanInput')?.focus(), 100);
+      } else if (tabName === 'kembali') {
+        renderReturnTab();
+        setTimeout(() => document.getElementById('returnScanInput')?.focus(), 100);
+      } else if (tabName === 'master') {
+        renderMasterTab();
+      } else {
+        renderDashboard();
+      }
+    }
+
+    // =========================================================================
+    // 5. LOGIKA TAB 1: DASHBOARD REAL-TIME
+    // =========================================================================
+    function getToolActiveInfo(toolCode) {
+      const now = Date.now();
+      for (const tx of state.transactions) {
+        if (tx.status === 'Aktif') {
+          const item = tx.items.find((it) => it.code === toolCode && !it.returnedAt);
+          if (item) {
+            const isOverdue = now > tx.dueAt;
+            return {
+              tx,
+              item,
+              isOverdue,
+              diffMs: tx.dueAt - now,
+            };
+          }
+        }
+      }
+      return null;
+    }
+
+    function setDashboardFilter(filterValue) {
+      state.dashboardFilter = filterValue;
+      document.querySelectorAll('.dash-filter-btn').forEach((btn) => {
+        if (btn.dataset.filter === filterValue) {
+          btn.className = 'dash-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-sm cursor-pointer';
+        } else {
+          btn.className = 'dash-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 cursor-pointer';
+        }
+      });
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      let total = state.tools.length;
+      let available = 0;
+      let borrowed = 0;
+      let overdueList = [];
+
+      state.tools.forEach((tool) => {
+        if (tool.status === 'Tersedia') {
+          available++;
+        } else if (tool.status === 'Dipinjam') {
+          borrowed++;
+          const activeInfo = getToolActiveInfo(tool.code);
+          if (activeInfo && activeInfo.isOverdue) {
+            overdueList.push({ tool, ...activeInfo });
+          }
+        }
+      });
+
+      // Update 4 Kartu Statistik
+      document.getElementById('statTotal').textContent = total;
+      document.getElementById('statAvailable').textContent = available;
+      document.getElementById('statBorrowed').textContent = borrowed;
+      document.getElementById('statOverdue').textContent = overdueList.length;
+
+      // Update Badge Navigasi
+      const navBadgeOverdue = document.getElementById('navBadgeOverdue');
+      const overdueCardBadge = document.getElementById('overdueCardBadge');
+      const cardStatOverdue = document.getElementById('cardStatOverdue');
+      const banner = document.getElementById('overdueAlertBanner');
+      const bannerList = document.getElementById('overdueAlertList');
+
+      if (overdueList.length > 0) {
+        navBadgeOverdue.textContent = overdueList.length;
+        navBadgeOverdue.classList.remove('hidden');
+        overdueCardBadge.classList.remove('hidden');
+        cardStatOverdue.classList.add('ring-2', 'ring-rose-500/40', 'bg-rose-50/30');
+
+        banner.classList.remove('hidden');
+        bannerList.innerHTML = overdueList
+          .map(
+            (ov) => `
+            <p class="flex flex-wrap items-center gap-1.5">
+              <span class="font-mono font-bold px-1.5 py-0.5 rounded bg-rose-200/80 text-rose-950">${ov.tool.code}</span>
+              <span class="font-bold">${ov.tool.name}</span> — dipinjam oleh
+              <span class="underline font-semibold">${ov.tx.borrowerName} (${ov.tx.borrowerRole})</span>
+              <span class="font-extrabold text-rose-700">[Terlambat ${formatDurationDiff(ov.diffMs)}]</span>
+            </p>`
+          )
+          .join('');
+      } else {
+        navBadgeOverdue.classList.add('hidden');
+        overdueCardBadge.classList.add('hidden');
+        cardStatOverdue.classList.remove('ring-2', 'ring-rose-500/40', 'bg-rose-50/30');
+        banner.classList.add('hidden');
+      }
+
+      // Filter Tabel Ketersediaan Alat
+      const query = (document.getElementById('dashboardSearch')?.value || '').toLowerCase().trim();
+      const filteredTools = state.tools.filter((tool) => {
+        const matchesFilter =
+          state.dashboardFilter === 'Semua' || tool.status === state.dashboardFilter;
+        const activeInfo = tool.status === 'Dipinjam' ? getToolActiveInfo(tool.code) : null;
+        const borrowerText = activeInfo ? activeInfo.tx.borrowerName.toLowerCase() : '';
+        const matchesQuery =
+          !query ||
+          tool.code.toLowerCase().includes(query) ||
+          tool.name.toLowerCase().includes(query) ||
+          tool.category.toLowerCase().includes(query) ||
+          tool.rack.toLowerCase().includes(query) ||
+          borrowerText.includes(query);
+        return matchesFilter && matchesQuery;
+      });
+
+      const tbody = document.getElementById('dashboardTableBody');
+      if (filteredTools.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" class="py-8 text-center text-sm text-slate-500">
+              Tidak ada alat yang sesuai dengan filter atau pencarian saat ini.
+            </td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filteredTools
+        .map((tool) => {
+          const activeInfo = tool.status === 'Dipinjam' ? getToolActiveInfo(tool.code) : null;
+          let statusBadge = '';
+          let detailText = '';
+          let actionBtn = '';
+
+          if (tool.status === 'Tersedia') {
+            statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Tersedia</span>`;
+            detailText = `<span class="text-slate-500 text-xs">Siap digunakan di ${tool.rack}</span>`;
+            actionBtn = `<button onclick="quickPinjamFromDashboard('${tool.code}')" class="px-3 py-1.5 rounded-lg bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white text-xs font-bold transition cursor-pointer">+ Pinjamkan</button>`;
+          } else if (tool.status === 'Dipinjam' && activeInfo) {
+            if (activeInfo.isOverdue) {
+              statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-extrabold bg-rose-100 text-rose-800 border border-rose-300 animate-pulse"><span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>Terlambat</span>`;
+              detailText = `
+                <div class="text-xs">
+                  <p class="font-bold text-slate-900">${activeInfo.tx.borrowerName}</p>
+                  <p class="text-rose-600 font-semibold">Lewat ${formatDurationDiff(activeInfo.diffMs)}</p>
+                </div>`;
+            } else {
+              statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>Dipinjam</span>`;
+              detailText = `
+                <div class="text-xs">
+                  <p class="font-bold text-slate-900">${activeInfo.tx.borrowerName}</p>
+                  <p class="text-slate-500">Kembali: ${formatDateTime(activeInfo.tx.dueAt)}</p>
+                </div>`;
+            }
+            actionBtn = `<button onclick="openReturnModal('${activeInfo.tx.id}', '${tool.code}')" class="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white text-xs font-bold transition cursor-pointer">Terima Kembali</button>`;
+          } else {
+            statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-800 border border-orange-300"><span class="w-1.5 h-1.5 rounded-full bg-orange-600"></span>Rusak</span>`;
+            detailText = `<span class="text-xs text-orange-800 font-medium">${tool.note || 'Dalam pengecekan PLP'}</span>`;
+            actionBtn = `<button onclick="repairTool('${tool.code}')" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-800 text-slate-700 hover:text-white text-xs font-bold transition cursor-pointer">Tandai Baik</button>`;
+          }
+
+          return `
+            <tr class="hover:bg-slate-50/80 transition">
+              <td class="py-3.5 px-4 font-mono font-bold text-indigo-700 whitespace-nowrap">${tool.code}</td>
+              <td class="py-3.5 px-4 font-bold text-slate-900">${tool.name}</td>
+              <td class="py-3.5 px-4 text-slate-600 text-xs font-medium">${tool.category}</td>
+              <td class="py-3.5 px-4 text-slate-700 text-xs font-semibold whitespace-nowrap">${tool.rack}</td>
+              <td class="py-3.5 px-4">${detailText}</td>
+              <td class="py-3.5 px-4 whitespace-nowrap">${statusBadge}</td>
+              <td class="py-3.5 px-4 text-right whitespace-nowrap">${actionBtn}</td>
+            </tr>`;
+        })
+        .join('');
+    }
+
+    function quickPinjamFromDashboard(toolCode) {
+      switchTab('pinjam');
+      handleQrScan(toolCode);
+    }
+
+    function repairTool(toolCode) {
+      const tool = state.tools.find((t) => t.code === toolCode);
+      if (tool) {
+        tool.status = 'Tersedia';
+        tool.note = '';
+        saveToStorage();
+        refreshAllViews();
+        showToast(`Status ${tool.code} (${tool.name}) diperbarui menjadi Tersedia.`, 'success');
+      }
+    }
+
+    // =========================================================================
+    // 6. LOGIKA TAB 2: PEMINJAMAN & SCAN QR (KAMERA + SIMULASI KLIK)
+    // =========================================================================
+    async function startQrCamera() {
+      const cameraWrapper = document.getElementById('cameraWrapper');
+      const errorBox = document.getElementById('cameraErrorBox');
+      const errorMsg = document.getElementById('cameraErrorMessage');
+      const btnStart = document.getElementById('btnStartCamera');
+      const btnStop = document.getElementById('btnStopCamera');
+
+      errorBox.classList.add('hidden');
+
+      if (typeof window.Html5Qrcode === 'undefined') {
+        errorMsg.textContent = 'Library kamera QR tidak termuat (periksa koneksi internet).';
+        errorBox.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        cameraWrapper.classList.remove('hidden');
+        if (!state.html5QrInstance) {
+          state.html5QrInstance = new Html5Qrcode('qr-reader');
+        }
+
+        await state.html5QrInstance.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 220, height: 220 } },
+          (decodedText) => {
+            const now = Date.now();
+            // Cooldown 1.8 detik agar scan kamera tidak berulang-ulang seketika
+            if (decodedText === state.lastScannedCode && now - state.lastScanTimestamp < 1800) {
+              return;
+            }
+            state.lastScannedCode = decodedText;
+            state.lastScanTimestamp = now;
+            handleQrScan(decodedText);
+          },
+          () => {
+            // Abaikan error frame kosong saat mencari QR
+          }
+        );
+
+        state.isCameraRunning = true;
+        btnStart.classList.add('hidden');
+        btnStop.classList.remove('hidden');
+        showToast('Kamera QR aktif. Arahkan QR Code ke kamera.', 'info');
+      } catch (err) {
+        cameraWrapper.classList.add('hidden');
+        errorMsg.textContent =
+          'Akses kamera tidak tersedia atau izin ditolak browser (' + (err?.message || 'Permission denied') + ').';
+        errorBox.classList.remove('hidden');
+        state.isCameraRunning = false;
+      }
+    }
+
+    async function stopQrCamera() {
+      const cameraWrapper = document.getElementById('cameraWrapper');
+      const btnStart = document.getElementById('btnStartCamera');
+      const btnStop = document.getElementById('btnStopCamera');
+
+      if (state.html5QrInstance && state.isCameraRunning) {
+        try {
+          await state.html5QrInstance.stop();
+        } catch (e) {
+          console.warn('Error saat stop kamera:', e);
+        }
+      }
+      state.isCameraRunning = false;
+      cameraWrapper.classList.add('hidden');
+      btnStop.classList.add('hidden');
+      btnStart.classList.remove('hidden');
+    }
+
+    function processManualScan() {
+      const input = document.getElementById('quickScanInput');
+      const code = input.value.trim().toUpperCase();
+      if (!code) return;
+      handleQrScan(code);
+      input.value = '';
+      input.focus();
+    }
+
+    // Fungsi Inti Pemrosesan Hasil Scan QR (Baik dari Kamera, Scanner Fisik, maupun Klik Simulasi)
+    function handleQrScan(rawCode) {
+      const code = rawCode.trim().toUpperCase();
+      playScanBeep();
+
+      // 1. Cek apakah kode milik Anggota (Siswa/Guru)
+      const member = state.members.find((m) => m.id.toUpperCase() === code);
+      if (member) {
+        state.selectedBorrowerId = member.id;
+        renderBorrowerSelection();
+        showToast(`Kartu Anggota Terdeteksi: ${member.name} (${member.role})`, 'success');
+        return;
+      }
+
+      // 2. Cek apakah kode milik Alat Bengkel
+      const tool = state.tools.find((t) => t.code.toUpperCase() === code);
+      if (tool) {
+        if (tool.status !== 'Tersedia') {
+          showToast(
+            `DITOLAK: ${tool.code} (${tool.name}) berstatus "${tool.status}" dan tidak dapat dipinjam!`,
+            'error'
+          );
+          return;
+        }
+        if (state.loanCart.includes(tool.code)) {
+          showToast(`Alat ${tool.code} sudah ada di daftar peminjaman saat ini.`, 'warning');
+          return;
+        }
+        state.loanCart.push(tool.code);
+        renderLoanCart();
+        renderSimToolCards();
+        showToast(`Alat Ditambahkan: ${tool.code} — ${tool.name}`, 'success');
+        return;
+      }
+
+      // 3. Kode tidak dikenali
+      showToast(`Kode QR "${code}" tidak terdaftar di database anggota maupun alat.`, 'error');
+    }
+
+    function selectBorrowerFromDropdown(memberId) {
+      if (!memberId) return;
+      state.selectedBorrowerId = memberId;
+      renderBorrowerSelection();
+    }
+
+    function renderBorrowerSelection() {
+      const container = document.getElementById('selectedBorrowerCard');
+      const dropdown = document.getElementById('manualBorrowerSelect');
+
+      // Isi opsi dropdown
+      dropdown.innerHTML =
+        `<option value="">-- Atau pilih peminjam secara manual --</option>` +
+        state.members
+          .map(
+            (m) =>
+              `<option value="${m.id}" ${state.selectedBorrowerId === m.id ? 'selected' : ''}>${m.id} — ${m.name} (${m.role})</option>`
+          )
+          .join('');
+
+      const member = state.members.find((m) => m.id === state.selectedBorrowerId);
+      if (!member) {
+        container.className =
+          'p-3.5 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-sm text-slate-500 flex items-center justify-between';
+        container.innerHTML = `<span>Belum ada kartu anggota dipindai...</span>`;
+        return;
+      }
+
+      container.className =
+        'p-3.5 rounded-xl border-2 border-indigo-500 bg-indigo-50/70 text-sm flex items-center justify-between';
+      container.innerHTML = `
+        <div>
+          <span class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-indigo-600 text-white">${member.id}</span>
+          <p class="font-extrabold text-slate-900 mt-1">${member.name}</p>
+          <p class="text-xs text-slate-600">${member.role}</p>
+        </div>
+        <button onclick="state.selectedBorrowerId=null; renderBorrowerSelection();" class="text-xs font-bold text-rose-600 hover:underline cursor-pointer">Ganti</button>
+      `;
+    }
+
+    function renderLoanCart() {
+      const listEl = document.getElementById('loanCartList');
+      const countEl = document.getElementById('loanCartCount');
+      countEl.textContent = state.loanCart.length;
+
+      if (state.loanCart.length === 0) {
+        listEl.innerHTML = `
+          <div class="p-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-center text-xs text-slate-500">
+            Pindai stiker QR alat (misal: MLT-001, CRM-001) untuk menambahkan ke daftar pinjam.
+          </div>`;
+        return;
+      }
+
+      listEl.innerHTML = state.loanCart
+        .map((code) => {
+          const tool = state.tools.find((t) => t.code === code);
+          if (!tool) return '';
+          return `
+            <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
+              <div>
+                <span class="font-mono text-xs font-bold text-indigo-700">${tool.code}</span>
+                <p class="text-xs font-bold text-slate-900">${tool.name}</p>
+                <p class="text-[11px] text-slate-500">${tool.rack}</p>
+              </div>
+              <button onclick="removeFromLoanCart('${tool.code}')" class="p-1.5 rounded-lg text-rose-600 hover:bg-rose-100 text-xs font-bold cursor-pointer" title="Hapus dari daftar">
+                &times; Hapus
+              </button>
+            </div>`;
+        })
+        .join('');
+    }
+
+    function removeFromLoanCart(code) {
+      state.loanCart = state.loanCart.filter((c) => c !== code);
+      renderLoanCart();
+      renderSimToolCards();
+    }
+
+    function setPurpose(text) {
+      document.getElementById('loanPurpose').value = text;
+    }
+
+    function clearLoanForm() {
+      state.selectedBorrowerId = null;
+      state.loanCart = [];
+      document.getElementById('loanPurpose').value = '';
+      renderBorrowerSelection();
+      renderLoanCart();
+      renderSimToolCards();
+    }
+
+    function renderLoanTab() {
+      renderBorrowerSelection();
+      renderLoanCart();
+
+      // Render Kartu Simulasi Anggota
+      const memberGrid = document.getElementById('simMemberQrGrid');
+      memberGrid.innerHTML = state.members
+        .map(
+          (m) => `
+          <button type="button" onclick="handleQrScan('${m.id}')" class="p-3 rounded-xl border border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/40 transition text-center flex flex-col items-center cursor-pointer group">
+            <div id="qr-member-${m.id}" class="qr-box p-1.5 bg-white rounded-lg border border-slate-100 mb-2"></div>
+            <span class="font-mono text-[11px] font-bold text-indigo-700 group-hover:underline">${m.id}</span>
+            <span class="text-xs font-extrabold text-slate-900 mt-0.5 line-clamp-1">${m.name}</span>
+            <span class="text-[10px] text-slate-500 line-clamp-1">${m.role}</span>
+          </button>`
+        )
+        .join('');
+
+      state.members.forEach((m) => {
+        const box = document.getElementById(`qr-member-${m.id}`);
+        if (box) renderQRCodeElement(box, m.id, 68);
+      });
+
+      renderSimToolCards();
+    }
+
+    function renderSimToolCards() {
+      const toolGrid = document.getElementById('simToolQrGrid');
+      const availableTools = state.tools.filter((t) => t.status === 'Tersedia');
+
+      if (availableTools.length === 0) {
+        toolGrid.innerHTML = `<p class="col-span-full text-xs text-slate-500 italic">Semua unit alat sedang dipinjam atau rusak.</p>`;
+        return;
+      }
+
+      toolGrid.innerHTML = availableTools
+        .map((t) => {
+          const inCart = state.loanCart.includes(t.code);
+          return `
+            <button type="button" onclick="handleQrScan('${t.code}')" class="p-3 rounded-xl border ${
+              inCart
+                ? 'border-emerald-500 bg-emerald-50/60'
+                : 'border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/30'
+            } transition text-center flex flex-col items-center cursor-pointer">
+              <div id="qr-simtool-${t.code}" class="qr-box p-1.5 bg-white rounded-lg border border-slate-100 mb-2"></div>
+              <span class="font-mono text-[11px] font-bold text-emerald-700">${t.code}</span>
+              <span class="text-xs font-bold text-slate-900 mt-0.5 line-clamp-1">${t.name}</span>
+              <span class="text-[10px] font-semibold mt-1 ${
+                inCart ? 'text-emerald-700' : 'text-slate-400'
+              }">${inCart ? '✓ Sudah di Keranjang' : 'Klik untuk Scan'}</span>
+            </button>`;
+        })
+        .join('');
+
+      availableTools.forEach((t) => {
+        const box = document.getElementById(`qr-simtool-${t.code}`);
+        if (box) renderQRCodeElement(box, t.code, 68);
+      });
+    }
+
+    function submitLoanTransaction() {
+      const borrower = state.members.find((m) => m.id === state.selectedBorrowerId);
+      const purpose = document.getElementById('loanPurpose').value.trim();
+      const durationVal = document.getElementById('loanDuration').value;
+
+      if (!borrower) {
+        showToast('Silakan pindai atau pilih Kartu Peminjam terlebih dahulu!', 'error');
+        return;
+      }
+      if (state.loanCart.length === 0) {
+        showToast('Daftar alat masih kosong. Pindai minimal 1 stiker QR alat!', 'error');
+        return;
+      }
+      if (!purpose) {
+        showToast('Mohon isi keperluan praktikum / mata pelajaran.', 'error');
+        document.getElementById('loanPurpose').focus();
+        return;
+      }
+
+      const now = Date.now();
+      let dueAt = now + 2 * 60 * 60 * 1000;
+      if (durationVal === 'eod') {
+        const eod = new Date();
+        eod.setHours(16, 0, 0, 0);
+        dueAt = eod.getTime() > now ? eod.getTime() : now + 2 * 60 * 60 * 1000;
+      } else {
+        const mins = parseInt(durationVal, 10);
+        dueAt = now + mins * 60 * 1000;
+      }
+
+      const borrowedItems = [];
+      state.loanCart.forEach((code) => {
+        const tool = state.tools.find((t) => t.code === code);
+        if (tool && tool.status === 'Tersedia') {
+          tool.status = 'Dipinjam';
+          borrowedItems.push({
+            code: tool.code,
+            name: tool.name,
+            returnedAt: null,
+            condition: null,
+            returnNote: '',
+          });
+        }
+      });
+
+      const txNumber = String(state.transactions.length + 1).padStart(3, '0');
+      const newTx = {
+        id: `TRX-2026-${txNumber}`,
+        borrowerId: borrower.id,
+        borrowerName: borrower.name,
+        borrowerRole: borrower.role,
+        purpose: purpose,
+        borrowedAt: now,
+        dueAt: dueAt,
+        status: 'Aktif',
+        items: borrowedItems,
+      };
+
+      state.transactions.unshift(newTx);
+      saveToStorage();
+      clearLoanForm();
+      refreshAllViews();
+
+      showToast(
+        `Transaksi ${newTx.id} tersimpan! ${borrowedItems.length} alat dipinjamkan ke ${borrower.name}.`,
+        'success'
+      );
+      switchTab('dashboard');
+    }
+
+    // =========================================================================
+    // 7. LOGIKA TAB 3: PENGEMBALIAN ALAT & LOG RIWAYAT PERMANEN
+    // =========================================================================
+    function processReturnScan() {
+      const input = document.getElementById('returnScanInput');
+      const code = input.value.trim().toUpperCase();
+      if (!code) return;
+
+      const activeInfo = getToolActiveInfo(code);
+      if (!activeInfo) {
+        showToast(`Kode alat "${code}" tidak sedang dalam status dipinjam.`, 'error');
+        input.value = '';
+        return;
+      }
+
+      playScanBeep();
+      input.value = '';
+      openReturnModal(activeInfo.tx.id, code);
+    }
+
+    function openReturnModal(txId, toolCode) {
+      const tx = state.transactions.find((t) => t.id === txId);
+      if (!tx) return;
+      const item = tx.items.find((it) => it.code === toolCode && !it.returnedAt);
+      if (!item) return;
+
+      state.activeReturnContext = { txId, toolCode };
+
+      const now = Date.now();
+      const diffMs = tx.dueAt - now;
+      const isOverdue = diffMs < 0;
+
+      document.getElementById('returnModalSummary').innerHTML = `
+        <div class="flex justify-between">
+          <span class="text-slate-500">Kode Transaksi:</span>
+          <span class="font-mono font-bold text-slate-900">${tx.id}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Alat Dikembalikan:</span>
+          <span class="font-bold text-indigo-700">${item.code} — ${item.name}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Peminjam:</span>
+          <span class="font-semibold text-slate-900">${tx.borrowerName} (${tx.borrowerRole})</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-500">Batas Kembali:</span>
+          <span class="font-semibold text-slate-800">${formatDateTime(tx.dueAt)}</span>
+        </div>
+      `;
+
+      const puncEl = document.getElementById('returnModalPunctuality');
+      if (isOverdue) {
+        puncEl.className = 'rounded-xl p-3.5 text-sm font-bold flex items-center justify-between bg-rose-50 border border-rose-300 text-rose-800';
+        puncEl.innerHTML = `
+          <span>Status Ketepatan Waktu:</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-xs">TERLAMBAT ${formatDurationDiff(diffMs)}</span>
+        `;
+      } else {
+        puncEl.className = 'rounded-xl p-3.5 text-sm font-bold flex items-center justify-between bg-emerald-50 border border-emerald-300 text-emerald-800';
+        puncEl.innerHTML = `
+          <span>Status Ketepatan Waktu:</span>
+          <span class="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-xs">TEPAT WAKTU</span>
+        `;
+      }
+
+      // Reset radio & catatan
+      document.querySelector('input[name="returnCondition"][value="Baik"]').checked = true;
+      document.getElementById('returnNotes').value = '';
+      document.getElementById('returnModal').classList.remove('hidden');
+    }
+
+    function closeReturnModal() {
+      state.activeReturnContext = null;
+      document.getElementById('returnModal').classList.add('hidden');
+    }
+
+    function confirmReturnSubmit() {
+      if (!state.activeReturnContext) return;
+      const { txId, toolCode } = state.activeReturnContext;
+      const tx = state.transactions.find((t) => t.id === txId);
+      const item = tx?.items.find((it) => it.code === toolCode && !it.returnedAt);
+      const tool = state.tools.find((t) => t.code === toolCode);
+
+      if (!tx || !item || !tool) return;
+
+      const condition = document.querySelector('input[name="returnCondition"]:checked')?.value || 'Baik';
+      const notes = document.getElementById('returnNotes').value.trim();
+
+      if (condition !== 'Baik' && !notes) {
+        showToast('Mohon isi catatan kerusakan untuk laporan Kepala Bengkel.', 'warning');
+        document.getElementById('returnNotes').focus();
+        return;
+      }
+
+      item.returnedAt = Date.now();
+      item.condition = condition;
+      item.returnNote = notes || 'Kondisi baik & lengkap';
+
+      // Update status master alat
+      if (condition === 'Baik') {
+        tool.status = 'Tersedia';
+        tool.note = '';
+      } else {
+        tool.status = 'Rusak';
+        tool.note = `${condition}: ${notes}`;
+      }
+
+      // Cek apakah semua item pada transaksi ini sudah kembali
+      const allReturned = tx.items.every((it) => it.returnedAt !== null);
+      if (allReturned) {
+        tx.status = 'Selesai';
+      }
+
+      saveToStorage();
+      closeReturnModal();
+      refreshAllViews();
+      showToast(`Pengembalian ${tool.code} berhasil dicatat (${condition}).`, 'success');
+    }
+
+    function renderReturnTab() {
+      const activeTxs = state.transactions.filter((tx) => tx.status === 'Aktif');
+      const container = document.getElementById('activeLoansContainer');
+      document.getElementById('activeLoansBadge').textContent = `${activeTxs.length} Transaksi Aktif`;
+      document.getElementById('navBadgeActive').textContent = activeTxs.length;
+
+      if (activeTxs.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-8 text-center text-sm text-slate-500 bg-slate-50 rounded-xl border border-dashed border-slate-300">
+            Tidak ada transaksi peminjaman aktif saat ini. Semua alat berada di bengkel.
+          </div>`;
+      } else {
+        const now = Date.now();
+        container.innerHTML = activeTxs
+          .map((tx) => {
+            const isOverdue = now > tx.dueAt;
+            const diffMs = tx.dueAt - now;
+            const unreturnedItems = tx.items.filter((it) => !it.returnedAt);
+
+            return `
+              <div class="rounded-2xl border-2 ${
+                isOverdue ? 'border-rose-400 bg-rose-50/40' : 'border-slate-200 bg-white'
+              } p-4 flex flex-col justify-between gap-3 shadow-xs">
+                <div>
+                  <div class="flex items-center justify-between gap-2 mb-2">
+                    <span class="font-mono text-xs font-bold text-slate-500">${tx.id}</span>
+                    ${
+                      isOverdue
+                        ? `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-rose-600 text-white animate-pulse">Terlambat ${formatDurationDiff(diffMs)}</span>`
+                        : `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800">Sisa ${formatDurationDiff(diffMs)}</span>`
+                    }
+                  </div>
+                  <h4 class="font-extrabold text-slate-900 text-base">${tx.borrowerName}</h4>
+                  <p class="text-xs text-slate-600">${tx.borrowerRole} • <span class="italic">${tx.purpose}</span></p>
+                  <p class="text-[11px] text-slate-500 mt-1">Pinjam: ${formatDateTime(tx.borrowedAt)} | Batas: <b>${formatDateTime(tx.dueAt)}</b></p>
+                </div>
+
+                <div class="space-y-2 pt-2 border-t border-slate-200/80">
+                  ${unreturnedItems
+                    .map(
+                      (it) => `
+                      <div class="flex items-center justify-between gap-2 bg-white px-3 py-2 rounded-xl border border-slate-200">
+                        <div>
+                          <span class="font-mono text-xs font-bold text-indigo-700">${it.code}</span>
+                          <span class="text-xs font-semibold text-slate-800 ml-1">${it.name}</span>
+                        </div>
+                        <button onclick="openReturnModal('${tx.id}', '${it.code}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shrink-0 cursor-pointer">
+                          Proses Kembali
+                        </button>
+                      </div>`
+                    )
+                    .join('')}
+                </div>
+              </div>`;
+          })
+          .join('');
+      }
+
+      renderHistoryTable();
+    }
+
+    function renderHistoryTable() {
+      const query = (document.getElementById('historySearch')?.value || '').toLowerCase().trim();
+      const tbody = document.getElementById('historyTableBody');
+
+      // Ratakan semua item transaksi ke baris log permanen
+      const logRows = [];
+      state.transactions.forEach((tx) => {
+        tx.items.forEach((item) => {
+          logRows.push({ tx, item });
+        });
+      });
+
+      const filtered = logRows.filter(({ tx, item }) => {
+        if (!query) return true;
+        return (
+          tx.id.toLowerCase().includes(query) ||
+          tx.borrowerName.toLowerCase().includes(query) ||
+          item.code.toLowerCase().includes(query) ||
+          item.name.toLowerCase().includes(query) ||
+          tx.purpose.toLowerCase().includes(query)
+        );
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-sm text-slate-500">Belum ada catatan riwayat yang cocok.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered
+        .map(({ tx, item }) => {
+          const isReturned = Boolean(item.returnedAt);
+          const checkTime = isReturned ? item.returnedAt : Date.now();
+          const isLate = checkTime > tx.dueAt;
+
+          let punctualityBadge = '';
+          if (!isReturned) {
+            punctualityBadge = isLate
+              ? `<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">Terlambat (Aktif)</span>`
+              : `<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Sedang Dipinjam</span>`;
+          } else {
+            punctualityBadge = isLate
+              ? `<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-800">Terlambat ${formatDurationDiff(tx.dueAt - item.returnedAt)}</span>`
+              : `<span class="px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Tepat Waktu</span>`;
+          }
+
+          let conditionHtml = `<span class="text-xs text-slate-400 italic">Menunggu pengembalian</span>`;
+          if (isReturned) {
+            const condColor =
+              item.condition === 'Baik'
+                ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                : 'text-rose-700 bg-rose-50 border-rose-200';
+            conditionHtml = `
+              <div>
+                <span class="px-2 py-0.5 rounded text-xs font-bold border ${condColor}">${item.condition}</span>
+                <p class="text-xs text-slate-600 mt-1">${item.returnNote || '-'}</p>
+              </div>`;
+          }
+
+          return `
+            <tr class="hover:bg-slate-50">
+              <td class="py-3.5 px-4 whitespace-nowrap">
+                <p class="font-mono text-xs font-bold text-slate-900">${tx.id}</p>
+                <p class="text-xs text-slate-500">${formatDateTime(tx.borrowedAt)}</p>
+              </td>
+              <td class="py-3.5 px-4">
+                <p class="font-bold text-slate-900 text-xs sm:text-sm">${tx.borrowerName}</p>
+                <p class="text-xs text-slate-500">${tx.borrowerRole}</p>
+              </td>
+              <td class="py-3.5 px-4">
+                <p class="text-xs sm:text-sm font-bold text-indigo-700"><span class="font-mono">${item.code}</span> — ${item.name}</p>
+                <p class="text-xs text-slate-500">${tx.purpose}</p>
+              </td>
+              <td class="py-3.5 px-4 text-xs whitespace-nowrap">
+                <p class="text-slate-600">Batas: ${formatDateTime(tx.dueAt)}</p>
+                <p class="font-semibold text-slate-900">Kembali: ${isReturned ? formatDateTime(item.returnedAt) : '-'}</p>
+              </td>
+              <td class="py-3.5 px-4 whitespace-nowrap">${punctualityBadge}</td>
+              <td class="py-3.5 px-4">${conditionHtml}</td>
+            </tr>`;
+        })
+        .join('');
+    }
+
+    // =========================================================================
+    // 8. LOGIKA TAB 4: MASTER ALAT & GENERATOR LABEL QR CODE
+    // =========================================================================
+    function handleAddNewTool(event) {
+      event.preventDefault();
+      const codeInput = document.getElementById('newToolCode');
+      const nameInput = document.getElementById('newToolName');
+      const categoryInput = document.getElementById('newToolCategory');
+      const rackInput = document.getElementById('newToolRack');
+
+      const code = codeInput.value.trim().toUpperCase();
+      const name = nameInput.value.trim();
+      const category = categoryInput.value;
+      const rack = rackInput.value.trim();
+
+      if (!code || !name || !rack) return;
+
+      if (state.tools.some((t) => t.code.toUpperCase() === code)) {
+        showToast(`Kode Aset "${code}" sudah terdaftar! Gunakan kode unik lain.`, 'error');
+        codeInput.focus();
+        return;
+      }
+
+      state.tools.push({
+        code,
+        name,
+        category,
+        rack,
+        status: 'Tersedia',
+        note: '',
+      });
+
+      saveToStorage();
+      codeInput.value = '';
+      nameInput.value = '';
+      rackInput.value = '';
+
+      refreshAllViews();
+      showToast(`Alat ${code} (${name}) berhasil ditambahkan & QR Code dibuat!`, 'success');
+    }
+
+    function renderMasterTab() {
+      const gallery = document.getElementById('qrLabelsGallery');
+      gallery.innerHTML = state.tools
+        .map(
+          (tool) => `
+          <div class="qr-sticker-card rounded-2xl border-2 border-slate-200 bg-white p-4 flex flex-col items-center text-center shadow-xs">
+            <div class="w-full bg-slate-900 text-white text-[10px] font-bold tracking-widest uppercase py-1 rounded-lg mb-3">
+              INVENTARIS BENGKEL TKJ / TI
+            </div>
+            <div id="qr-master-${tool.code}" class="qr-box p-2 bg-white rounded-xl border border-slate-200 mb-2.5"></div>
+            <p class="font-mono text-base font-extrabold text-slate-900 tracking-wide">${tool.code}</p>
+            <p class="text-xs font-bold text-slate-800 mt-0.5 line-clamp-2 min-h-[2rem]">${tool.name}</p>
+            <div class="mt-2 pt-2 border-t border-slate-100 w-full flex items-center justify-between text-[11px] text-slate-500">
+              <span>${tool.category}</span>
+              <span class="font-bold text-slate-700">${tool.rack}</span>
+            </div>
+          </div>`
+        )
+        .join('');
+
+      state.tools.forEach((tool) => {
+        const el = document.getElementById(`qr-master-${tool.code}`);
+        if (el) renderQRCodeElement(el, tool.code, 108);
+      });
+    }
+
+    // =========================================================================
+    // 9. EKSPOR LAPORAN CSV & RESET DATA DEMO
+    // =========================================================================
+    function exportToCSV() {
+      const headers = [
+        'ID Transaksi',
+        'Waktu Pinjam',
+        'Batas Kembali',
+        'Waktu Kembali Aktual',
+        'ID Peminjam',
+        'Nama Peminjam',
+        'Kelas/Jabatan',
+        'Kode Alat',
+        'Nama Alat',
+        'Keperluan',
+        'Status Transaksi',
+        'Kondisi Akhir',
+        'Catatan PLP',
+      ];
+
+      const rows = [];
+      state.transactions.forEach((tx) => {
+        tx.items.forEach((item) => {
+          rows.push([
+            tx.id,
+            formatDateTime(tx.borrowedAt),
+            formatDateTime(tx.dueAt),
+            item.returnedAt ? formatDateTime(item.returnedAt) : 'Belum Kembali',
+            tx.borrowerId,
+            tx.borrowerName,
+            tx.borrowerRole,
+            item.code,
+            item.name,
+            tx.purpose,
+            item.returnedAt ? 'Selesai' : Date.now() > tx.dueAt ? 'Terlambat' : 'Dipinjam',
+            item.condition || '-',
+            item.returnNote || '-',
+          ]);
+        });
+      });
+
+      const csvContent =
+        '\uFEFF' +
+        [headers, ...rows]
+          .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+          .join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Laporan_Peminjaman_Bengkel_TKJ_${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      showToast('Laporan sirkulasi peminjaman (CSV) berhasil diunduh.', 'success');
+    }
+
+    function openResetModal() {
+      document.getElementById('resetModal').classList.remove('hidden');
+    }
+
+    function closeResetModal() {
+      document.getElementById('resetModal').classList.add('hidden');
+    }
+
+    function executeResetDemo() {
+      const seed = getSeedData();
+      state.tools = seed.tools;
+      state.members = seed.members;
+      state.transactions = seed.transactions;
+      state.selectedBorrowerId = null;
+      state.loanCart = [];
+      saveToStorage();
+      closeResetModal();
+      refreshAllViews();
+      showToast('Data demo berhasil dikembalikan ke skenario awal studi kasus.', 'info');
+    }
+
+    // =========================================================================
+    // 10. INISIALISASI & TIMER REAL-TIME
+    // =========================================================================
+    function refreshAllViews() {
+      const activeCount = state.transactions.filter((tx) => tx.status === 'Aktif').length;
+      document.getElementById('navBadgeActive').textContent = activeCount;
+
+      renderDashboard();
+      if (state.currentTab === 'pinjam') renderLoanTab();
+      if (state.currentTab === 'kembali') renderReturnTab();
+      if (state.currentTab === 'master') renderMasterTab();
+    }
+
+    function updateLiveClock() {
+      const clockEl = document.getElementById('liveClock');
+      if (clockEl) {
+        const now = new Date();
+        clockEl.textContent = now.toLocaleTimeString('id-ID') + ' WIB';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadFromStorage();
+      refreshAllViews();
+      updateLiveClock();
+      updateLastSyncIndicator();
+
+      // Perbarui jam setiap detik & status keterlambatan otomatis setiap 15 detik
+      setInterval(updateLiveClock, 1000);
+      setInterval(() => {
+        renderDashboard();
+        if (state.currentTab === 'kembali') renderReturnTab();
+      }, 15000);
+    });
+  </script>
 </body>
 </html>
